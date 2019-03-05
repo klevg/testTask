@@ -32,9 +32,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     func getResultJSON(for inputForSearch: String) {
-        let apiKey = "AIzaSyBaiPxS6zcM6b02-IxeTmu4vkesUv26tn0"
-        let bundleId = "com.klevg.testTask"
-        let searchEngineId = "013963759840762655514:yzet_vnh9ge"
+        let apiKey = ""
+        let bundleId = ""
+        let searchEngineId = ""
         let serverAddress = String(format: "https://www.googleapis.com/customsearch/v1?q=%@&cx=%@&key=%@", inputForSearch, searchEngineId, apiKey)
         
         
