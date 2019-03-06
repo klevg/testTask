@@ -29,6 +29,9 @@
                                     <constraint firstAttribute="height" constant="40" id="VOA-eH-LWA"/>
                                 </constraints>
                                 <state key="normal" title="Google Search"/>
+                                <connections>
+                                    <action selector="searchButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2kl-4l-Ffp"/>
+                                </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YKR-gK-gff">
                                 <rect key="frame" x="8" y="120" width="359" height="525"/>

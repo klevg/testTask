@@ -8,15 +8,40 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, ResultDelegate {
     
     
     @IBOutlet weak var resultTableView: UITableView!
-    
     @IBOutlet weak var searchButton: UIButton!
-    
     @IBOutlet weak var textField: UITextField!
+    private var request: Request? = nil
     
+    
+    @IBAction func searchButtonIsPressed(_ sender: UIButton) {
+        if sender.currentTitle == "Google Search" {
+            startSearch(input: textField)
+        } else if sender.currentTitle == "Stop" {
+            sender.setTitle("Google Search", for: [])
+        }
+    }
+    
+    private func startSearch(input forSearch: UITextField) {
+        searchButton.setTitle("Stop", for: [])
+        
+        if let input = forSearch.text {
+            let inputWithoutWhitespaces = input.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !inputWithoutWhitespaces.isEmpty {
+                request = Request(input: inputWithoutWhitespaces)
+                request?.delegate = self
+            }
+        }
+    }
+
+    func updateResultTableView() {
+            self.resultTableView.reloadData()
+    }
+
+
     
     
     
@@ -24,46 +49,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         resultTableView.dataSource = self
         resultTableView.delegate = self
-        //getResultJSON(for: "hello, world!")
+        textField.delegate = self
+        
     }
     
-    
-    
-    
-    
-    func getResultJSON(for inputForSearch: String) {
-        let apiKey = "AIzaSyBaiPxS6zcM6b02-IxeTmu4vkesUv26tn0"
-        let bundleId = "com.klevg.testTask"
-        let searchEngineId = "013963759840762655514:yzet_vnh9ge"
-        let serverAddress = String(format: "https://www.googleapis.com/customsearch/v1?q=%@&cx=%@&key=%@", inputForSearch, searchEngineId, apiKey)
-        
-        
-        let url = serverAddress.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        let finalUrl = URL(string: url!)
-        let request = NSMutableURLRequest(url: finalUrl!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10)
-        request.httpMethod = "GET"
-        request.setValue(bundleId, forHTTPHeaderField: "X-Ios-Bundle-Identifier")
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            let session = URLSession.shared
-            
-            let datatask = session.dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
-                do {
-                    if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary {
-                        print("asyncResult\(jsonResult)")
-                    }
-                }
-                    
-                catch let error as NSError{
-                    print(error.localizedDescription)
-                }
-            }
-            
-            datatask.resume()
-        }
-    }
-    
+  
 }
+
 
 
 
@@ -71,7 +63,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 extension ViewController {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return request?.items.count ?? 0
     }
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return " "
@@ -80,15 +72,25 @@ extension ViewController {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? ResultTableViewCell  else { fatalError() }
-        cell.link.text = "Link"
-        cell.title.text = "Title"
         
+        let link = request?.items[indexPath.row]?.link ?? ""
+        let title = request?.items[indexPath.row]?.title ?? ""
+        
+        cell.link.text =  link
+        cell.title.text = title
         return cell
-    
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70.0
     }
+}
 
 
+// MARK: Text Field Delegate
+extension ViewController {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
