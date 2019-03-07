@@ -36,9 +36,13 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YKR-gK-gff">
                                 <rect key="frame" x="8" y="120" width="359" height="525"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <progressView key="tableHeaderView" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" id="iFT-Op-HGD">
+                                    <rect key="frame" x="0.0" y="0.0" width="359" height="3"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                </progressView>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="70" id="VIi-qm-CKF" customClass="ResultTableViewCell" customModule="testTask" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="359" height="70"/>
+                                        <rect key="frame" x="0.0" y="30" width="359" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="VIi-qm-CKF" id="S86-dm-gGy">
                                             <rect key="frame" x="0.0" y="0.0" width="359" height="69.5"/>
@@ -96,6 +100,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="progressView" destination="iFT-Op-HGD" id="z4J-2c-Meh"/>
                         <outlet property="resultTableView" destination="YKR-gK-gff" id="vWq-2K-Ch6"/>
                         <outlet property="searchButton" destination="4AZ-sA-uZU" id="OIu-cD-bNs"/>
                         <outlet property="textField" destination="p3T-Ag-0Ji" id="ars-4d-yVf"/>
