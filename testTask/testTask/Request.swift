@@ -16,7 +16,7 @@ protocol LimitOfRequestDelegate: class {
     func showAlertWithOutOfLimit()
 }
 
-protocol updateProgressViewDelegate: class {
+protocol UpdateProgressViewDelegate: class {
     func updateProgressView(_ value: Float)
 }
 
@@ -26,8 +26,9 @@ class Request: URLSessionDataTask, URLSessionDelegate, URLSessionDataDelegate {
     var items: [Item?]
     weak var resultDelegate: ResultDelegate?
     weak var limitDelegate: LimitOfRequestDelegate? = nil
-    weak var updateProgressViewdelegate: updateProgressViewDelegate? = nil
+    weak var updateProgressViewdelegate: UpdateProgressViewDelegate? = nil
     private var searchShouldEndObserver: NSObjectProtocol?
+    private var currentDataTask: URLSessionTask?
    
     init(input forSearch: String) {
         self.inputForSearch = forSearch
@@ -72,8 +73,6 @@ class Request: URLSessionDataTask, URLSessionDelegate, URLSessionDataDelegate {
                         var returnArray: [Item] = []
                         for dict in jsonArray {
                             let newArray = Item(dictionary: dict)
-                            print(newArray.link)
-                            print(newArray.title)
                             returnArray.append(newArray)
                         }
                         self.items = returnArray
@@ -123,7 +122,7 @@ class Request: URLSessionDataTask, URLSessionDelegate, URLSessionDataDelegate {
                 object: nil,
                 queue: nil,
                 using: { notification in
-                    session.invalidateAndCancel()
+                    self.currentDataTask?.cancel()
                     print("datatask canceled!")
             } )
             
@@ -143,11 +142,13 @@ class Request: URLSessionDataTask, URLSessionDelegate, URLSessionDataDelegate {
                     if let dataString = String(data: data, encoding: String.Encoding.utf8) {
                         
                         DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
                             completionHandler(dataString, nil)
                         }
                     }
                 }
             }
+            self.currentDataTask = datatask
             datatask.resume()
         }
     }

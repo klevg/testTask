@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, ResultDelegate, LimitOfRequestDelegate, updateProgressViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, ResultDelegate, LimitOfRequestDelegate, UpdateProgressViewDelegate {
 
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var resultTableView: UITableView!
@@ -26,6 +26,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             startSearch(input: textField)
         } else if sender.currentTitle == "Stop" {
             NotificationCenter.default.post(name: .SearchShouldEnd, object: nil)
+            self.updateResultTableView()
             sender.setTitle("Google Search", for: [])
         }
     }
@@ -51,7 +52,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     func updateResultTableView() {
-            self.resultTableView.reloadData()
+        self.resultTableView.reloadData()
     }
     
     func updateProgressView(_ value: Float) {
